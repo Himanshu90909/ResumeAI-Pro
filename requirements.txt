@@ -1,0 +1,14 @@
+streamlit
+PyPDF2
+python-docx
+spacy
+scikit-learn
+pandas
+numpy
+matplotlib
+plotly
+reportlab
+openai
+requests
+beautifulsoup4
+pdfplumber

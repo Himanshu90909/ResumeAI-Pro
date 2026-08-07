@@ -1,0 +1,45 @@
+{
+  "programming_languages": [
+    "Python", "Java", "JavaScript", "TypeScript", "C++", "C#", "C", "Go", "Rust", 
+    "PHP", "Ruby", "Swift", "Kotlin", "Scala", "R", "Dart", "Shell", "Bash", 
+    "SQL", "HTML", "CSS", "Assembly", "Haskell", "Elixir", "Lua", "Perl", "Julia", "MATLAB"
+  ],
+  "frameworks": [
+    "React", "Angular", "Vue.js", "Django", "Flask", "FastAPI", "Spring Boot", 
+    "Express.js", "Next.js", "Nuxt.js", "Svelte", "Node.js", "ASP.NET Core", 
+    "Ruby on Rails", "Laravel", "Symfony", "GraphQL", "Tailwind CSS", "Bootstrap", 
+    "jQuery", "Flutter", "React Native", "PyQt", "Streamlit", "Gradio"
+  ],
+  "ai_ml": [
+    "PyTorch", "TensorFlow", "Scikit-learn", "Keras", "XGBoost", "LangChain", 
+    "OpenAI", "Hugging Face", "NLTK", "spaCy", "OpenCV", "LightGBM", "CatBoost", 
+    "Deep Learning", "Computer Vision", "NLP", "LLM", "RAG", "BERT", "Transformers", 
+    "GNN", "MLOps", "Weights & Biases", "MLflow", "LlamaIndex", "Fine-Tuning", "Stable Diffusion"
+  ],
+  "databases": [
+    "PostgreSQL", "MySQL", "MongoDB", "Redis", "Elasticsearch", "SQLite", 
+    "Oracle", "Microsoft SQL Server", "Cassandra", "DynamoDB", "Neo4j", 
+    "Pinecone", "ChromaDB", "Supabase", "Firebase", "ClickHouse", "CockroachDB", "Milvus"
+  ],
+  "cloud": [
+    "AWS", "Google Cloud", "Azure", "Docker", "Kubernetes", "Terraform", 
+    "Cloudflare", "Heroku", "Vercel", "Netlify", "DigitalOcean", "Serverless", 
+    "AWS Lambda", "AWS EC2", "AWS S3", "AWS ECS", "AWS EKS", "GCP", "OpenShift"
+  ],
+  "tools": [
+    "Git", "GitHub", "GitLab", "JIRA", "Jenkins", "CircleCI", "GitHub Actions", 
+    "Postman", "Webpack", "Vite", "VS Code", "Docker Compose", "Prometheus", 
+    "Grafana", "Linux", "Nginx", "Ansible", "Datadog", "SonarQube", "Maven", "Gradle"
+  ],
+  "data": [
+    "Pandas", "NumPy", "Spark", "Hadoop", "Tableau", "PowerBI", "Apache Airflow", 
+    "dbt", "BigQuery", "Snowflake", "Databricks", "SciPy", "Matplotlib", 
+    "Seaborn", "Apache Kafka", "ETL", "Data Warehousing", "Data Modeling", "Polars"
+  ],
+  "soft_skills": [
+    "Leadership", "Communication", "Teamwork", "Problem Solving", "Critical Thinking", 
+    "Time Management", "Adaptability", "Agile", "Scrum", "Project Management", 
+    "Collaboration", "Conflict Resolution", "Mentorship", "Public Speaking", 
+    "Analytical Thinking", "Strategic Planning", "Cross-functional Leadership"
+  ]
+}
