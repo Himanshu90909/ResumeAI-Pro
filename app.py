@@ -746,6 +746,138 @@ def semantic_similarity(text1: str, text2: str) -> float:
         return round(float(intersection / union), 4)
 
 
+# --- Missing helper functions needed by modules ---
+# These bridge the gap between what modules expect and what nlp_utils defines
+
+def clean_text(text):
+    """Clean and normalize text: remove extra whitespace, fix line breaks, strip special chars."""
+    if not text:
+        return ""
+    # Remove extra whitespace
+    text = re.sub(r'\s+', ' ', text)
+    # Fix common PDF extraction artifacts
+    text = text.replace('\x00', '').replace('\ufffd', '')
+    # Normalize line breaks - keep paragraph breaks but remove mid-sentence breaks
+    text = re.sub(r'(?<!\n)\n(?![A-Z\n•\-\*\d])', ' ', text)
+    # Remove multiple spaces
+    text = re.sub(r' {2,}', ' ', text)
+    return text.strip()
+
+
+def extract_contact_info(text):
+    """Alias for extract_contact - extract contact details from resume text."""
+    return extract_contact(text)
+
+
+def extract_years_experience(text):
+    """Extract total years of experience from resume text."""
+    if not text:
+        return 0.0
+    # Look for patterns like "4+ years", "3 years of experience", "5+ years"
+    patterns = [
+        r'(\d+)\s*\+?\s*years?\s*(?:of)?\s*experience',
+        r'(\d+)\s*\+?\s*years?\s*in\s',
+        r'experience\s*(?:of|:)?\s*(\d+)\s*\+?\s*years?',
+    ]
+    max_years = 0.0
+    for pattern in patterns:
+        matches = re.findall(pattern, text, re.IGNORECASE)
+        for m in matches:
+            try:
+                years = float(m)
+                if years > max_years:
+                    max_years = years
+            except ValueError:
+                continue
+    # Also check for date ranges like "2018 - 2023" or "2018-2023"
+    date_ranges = re.findall(r'(20\d{2})\s*[-–]\s*(20\d{2}|present|current|now)', text, re.IGNORECASE)
+    for start, end in date_ranges:
+        try:
+            start_year = int(start)
+            if end.lower() in ('present', 'current', 'now'):
+                end_year = 2026
+            else:
+                end_year = int(end)
+            diff = end_year - start_year
+            if 0 < diff <= 40 and diff > max_years:
+                max_years = float(diff)
+        except (ValueError, TypeError):
+            continue
+    return max_years
+
+
+def calculate_flesch_reading_ease(text):
+    """Alias for compute_readability - calculate Flesch Reading Ease score."""
+    return compute_readability(text)
+
+
+def get_skills_database():
+    """Return the skills database dictionary for category lookup."""
+    return SKILLS_DATABASE
+
+
+def get_action_verbs():
+    """Return a set of strong action verbs for resume bullet analysis."""
+    return {
+        "architected", "engineered", "spearheaded", "optimized", "streamlined",
+        "implemented", "deployed", "designed", "developed", "executed",
+        "formulated", "launched", "managed", "led", "built", "created",
+        "established", "improved", "increased", "reduced", "achieved",
+        "delivered", "automated", "orchestrated", "accelerated", "transformed",
+        "pioneered", "overhauled", "refactored", "scaled", "migrated",
+        "integrated", "configured", "analyzed", "mentored", "coordinated",
+        "supervised", "initiated", "negotiated", "presented", "published",
+        "researched", "prototyped", "validated", "administered", "operationalized"
+    }
+
+
+def get_weak_words_map():
+    """Return a mapping of weak phrases to strong replacement action verbs."""
+    return {
+        "responsible for": ["Spearheaded", "Owned", "Managed"],
+        "helped with": ["Collaborated on", "Contributed to", "Drove"],
+        "helped": ["Drove", "Facilitated", "Accelerated"],
+        "worked on": ["Engineered", "Developed", "Built"],
+        "assisted in": ["Coordinated", "Facilitated", "Supported"],
+        "assisted with": ["Supported", "Contributed to", "Enabled"],
+        "was involved in": ["Participated in", "Contributed to", "Engaged in"],
+        "did": ["Executed", "Completed", "Delivered"],
+        "handled": ["Managed", "Administered", "Oversaw"],
+        "used": ["Leveraged", "Utilized", "Employed"],
+        "made": ["Created", "Developed", "Produced"],
+        "participated in": ["Engaged in", "Contributed to", "Collaborated on"],
+        "in charge of": ["Directed", "Led", "Oversaw"],
+        "tasked with": ["Assigned to", "Charged with", "Delegated"],
+        "duties included": ["Key responsibilities:", "Core functions:", "Primary focus:"],
+        "team member": ["Team contributor", "Collaborative member", "Core participant"],
+    }
+
+
+# Override extract_skills to also return a flat list when needed
+# The original returns a dict; modules need a list. We provide both:
+# - extract_skills(text) returns flat list for module compatibility
+# - extract_skills_dict(text) returns the categorized dict
+_extract_skills_original = extract_skills
+
+
+def extract_skills(text, skills_db=None):
+    """Extract skills from text. Returns a flat list of skill strings.
+    
+    This overrides the dict-returning version for module compatibility.
+    Modules use: set(s.lower() for s in extract_skills(text))
+    """
+    if not text:
+        return []
+    result = _extract_skills_original(text)
+    if isinstance(result, dict):
+        return result.get("all_skills", [])
+    return result
+
+
+def extract_skills_dict(text, skills_db=None):
+    """Extract skills from text returning categorized dictionary."""
+    return _extract_skills_original(text)
+
 # =============================================================================
 # AI ENGINE (from utils/ai_engine.py)
 # =============================================================================
