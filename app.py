@@ -6231,7 +6231,11 @@ elif nav_selection == "📄 1. Resume Parser":
     if uploaded_file is not None:
         file_bytes = uploaded_file.getvalue()
         with st.spinner("Parsing resume sections and extracting entities..."):
-            parsed_res = parser_mod.parse(file_bytes, uploaded_file.name)
+            # Detect file type from filename extension
+            _file_ext = uploaded_file.name.lower().split('.')[-1]
+            if _file_ext not in ('pdf', 'docx', 'doc', 'txt'):
+                _file_ext = 'pdf'  # default
+            parsed_res = parser_mod.parse(file_bytes, _file_ext)
             st.session_state.resume_data = parsed_res
             st.success(f"Successfully parsed '{uploaded_file.name}'!")
 
