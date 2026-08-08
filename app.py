@@ -410,10 +410,17 @@ def extract_skills(
 
     skills_data = {}
     if skills_db is None:
-        db_path = os.path.join(os.path.dirname(__file__), "..", "data", "skills_database.json")
-        if os.path.exists(db_path):
-            with open(db_path, "r", encoding="utf-8") as f:
-                skills_data = json.load(f)
+        # Use inlined SKILLS_DATABASE global (robust lookup)
+        skills_data = globals().get("SKILLS_DATABASE", {})
+        if not skills_data:
+            # Fallback: try loading from file
+            try:
+                db_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "data", "skills_database.json")
+                if os.path.exists(db_path):
+                    with open(db_path, "r", encoding="utf-8") as f:
+                        skills_data = json.load(f)
+            except Exception:
+                skills_data = {}
     elif isinstance(skills_db, str):
         if os.path.exists(skills_db):
             with open(skills_db, "r", encoding="utf-8") as f:
